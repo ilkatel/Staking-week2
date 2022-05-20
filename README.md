@@ -1,0 +1,1 @@
+![Покрытие тестов](images/img_coverage.jpg) <br>
