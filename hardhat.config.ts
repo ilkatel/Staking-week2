@@ -28,7 +28,7 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
-  defaultNetwork: "hardhat",
+  defaultNetwork: "rinkeby",
 };
 
 export default config;

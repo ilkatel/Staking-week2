@@ -21,71 +21,33 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface STAKINGInterface extends ethers.utils.Interface {
   functions: {
-    "allowance(address,address)": FunctionFragment;
-    "approve(address,uint256)": FunctionFragment;
-    "balanceOf(address)": FunctionFragment;
-    "burn(address,uint256)": FunctionFragment;
     "claim()": FunctionFragment;
-    "decimals()": FunctionFragment;
     "freezing()": FunctionFragment;
     "interval()": FunctionFragment;
-    "mint(address,uint256)": FunctionFragment;
-    "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "percent()": FunctionFragment;
+    "rewardToken()": FunctionFragment;
     "rewards(address)": FunctionFragment;
     "stake(uint256)": FunctionFragment;
     "stakeToken()": FunctionFragment;
-    "symbol()": FunctionFragment;
-    "totalSupply()": FunctionFragment;
-    "transfer(address,uint256)": FunctionFragment;
-    "transferFrom(address,address,uint256)": FunctionFragment;
     "unstake()": FunctionFragment;
     "updateStaking(uint8,uint256,uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "allowance",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "approve",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "burn",
-    values: [string, BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "claim", values?: undefined): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(functionFragment: "freezing", values?: undefined): string;
   encodeFunctionData(functionFragment: "interval", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "mint",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "percent", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "rewardToken",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "rewards", values: [string]): string;
   encodeFunctionData(functionFragment: "stake", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "stakeToken",
     values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "totalSupply",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transfer",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferFrom",
-    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "unstake", values?: undefined): string;
   encodeFunctionData(
@@ -93,31 +55,18 @@ interface STAKINGInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "freezing", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "interval", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "percent", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "rewardToken",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "rewards", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "stake", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "stakeToken", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "totalSupply",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "transferFrom",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "unstake", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "updateStaking",
@@ -125,34 +74,14 @@ interface STAKINGInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "Approval(address,address,uint256)": EventFragment;
     "Stake(address,uint256)": EventFragment;
-    "Transfer(address,address,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Stake"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
-
-export type ApprovalEvent = TypedEvent<
-  [string, string, BigNumber] & {
-    _owner: string;
-    _spender: string;
-    _value: BigNumber;
-  }
->;
 
 export type StakeEvent = TypedEvent<
   [string, BigNumber] & { _from: string; _value: BigNumber }
->;
-
-export type TransferEvent = TypedEvent<
-  [string, string, BigNumber] & {
-    _from: string;
-    _to: string;
-    _value: BigNumber;
-  }
 >;
 
 export class STAKING extends BaseContract {
@@ -199,47 +128,19 @@ export class STAKING extends BaseContract {
   interface: STAKINGInterface;
 
   functions: {
-    allowance(
-      _owner: string,
-      _spender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    approve(
-      _spender: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    balanceOf(_owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    burn(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     claim(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    decimals(overrides?: CallOverrides): Promise<[number]>;
 
     freezing(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     interval(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    mint(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    name(overrides?: CallOverrides): Promise<[string]>;
-
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     percent(overrides?: CallOverrides): Promise<[number]>;
+
+    rewardToken(overrides?: CallOverrides): Promise<[string]>;
 
     rewards(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -249,23 +150,6 @@ export class STAKING extends BaseContract {
     ): Promise<ContractTransaction>;
 
     stakeToken(overrides?: CallOverrides): Promise<[string]>;
-
-    symbol(overrides?: CallOverrides): Promise<[string]>;
-
-    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    transfer(
-      _to: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    transferFrom(
-      _from: string,
-      _to: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     unstake(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -279,47 +163,19 @@ export class STAKING extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  allowance(
-    _owner: string,
-    _spender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  approve(
-    _spender: string,
-    _value: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  balanceOf(_owner: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  burn(
-    _account: string,
-    _amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   claim(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  decimals(overrides?: CallOverrides): Promise<number>;
 
   freezing(overrides?: CallOverrides): Promise<BigNumber>;
 
   interval(overrides?: CallOverrides): Promise<BigNumber>;
 
-  mint(
-    _account: string,
-    _amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  name(overrides?: CallOverrides): Promise<string>;
-
   owner(overrides?: CallOverrides): Promise<string>;
 
   percent(overrides?: CallOverrides): Promise<number>;
+
+  rewardToken(overrides?: CallOverrides): Promise<string>;
 
   rewards(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -329,23 +185,6 @@ export class STAKING extends BaseContract {
   ): Promise<ContractTransaction>;
 
   stakeToken(overrides?: CallOverrides): Promise<string>;
-
-  symbol(overrides?: CallOverrides): Promise<string>;
-
-  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-  transfer(
-    _to: string,
-    _value: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  transferFrom(
-    _from: string,
-    _to: string,
-    _value: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   unstake(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -359,68 +198,23 @@ export class STAKING extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    allowance(
-      _owner: string,
-      _spender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    approve(
-      _spender: string,
-      _value: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    balanceOf(_owner: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    burn(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     claim(overrides?: CallOverrides): Promise<void>;
-
-    decimals(overrides?: CallOverrides): Promise<number>;
 
     freezing(overrides?: CallOverrides): Promise<BigNumber>;
 
     interval(overrides?: CallOverrides): Promise<BigNumber>;
 
-    mint(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    name(overrides?: CallOverrides): Promise<string>;
-
     owner(overrides?: CallOverrides): Promise<string>;
 
     percent(overrides?: CallOverrides): Promise<number>;
+
+    rewardToken(overrides?: CallOverrides): Promise<string>;
 
     rewards(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     stake(_amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
     stakeToken(overrides?: CallOverrides): Promise<string>;
-
-    symbol(overrides?: CallOverrides): Promise<string>;
-
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transfer(
-      _to: string,
-      _value: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    transferFrom(
-      _from: string,
-      _to: string,
-      _value: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     unstake(overrides?: CallOverrides): Promise<boolean>;
 
@@ -433,24 +227,6 @@ export class STAKING extends BaseContract {
   };
 
   filters: {
-    "Approval(address,address,uint256)"(
-      _owner?: string | null,
-      _spender?: string | null,
-      _value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { _owner: string; _spender: string; _value: BigNumber }
-    >;
-
-    Approval(
-      _owner?: string | null,
-      _spender?: string | null,
-      _value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { _owner: string; _spender: string; _value: BigNumber }
-    >;
-
     "Stake(address,uint256)"(
       _from?: string | null,
       _value?: null
@@ -466,68 +242,22 @@ export class STAKING extends BaseContract {
       [string, BigNumber],
       { _from: string; _value: BigNumber }
     >;
-
-    "Transfer(address,address,uint256)"(
-      _from?: string | null,
-      _to?: string | null,
-      _value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { _from: string; _to: string; _value: BigNumber }
-    >;
-
-    Transfer(
-      _from?: string | null,
-      _to?: string | null,
-      _value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { _from: string; _to: string; _value: BigNumber }
-    >;
   };
 
   estimateGas: {
-    allowance(
-      _owner: string,
-      _spender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    approve(
-      _spender: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    balanceOf(_owner: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    burn(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     claim(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    decimals(overrides?: CallOverrides): Promise<BigNumber>;
 
     freezing(overrides?: CallOverrides): Promise<BigNumber>;
 
     interval(overrides?: CallOverrides): Promise<BigNumber>;
 
-    mint(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    name(overrides?: CallOverrides): Promise<BigNumber>;
-
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     percent(overrides?: CallOverrides): Promise<BigNumber>;
+
+    rewardToken(overrides?: CallOverrides): Promise<BigNumber>;
 
     rewards(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -537,23 +267,6 @@ export class STAKING extends BaseContract {
     ): Promise<BigNumber>;
 
     stakeToken(overrides?: CallOverrides): Promise<BigNumber>;
-
-    symbol(overrides?: CallOverrides): Promise<BigNumber>;
-
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transfer(
-      _to: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    transferFrom(
-      _from: string,
-      _to: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     unstake(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -568,50 +281,19 @@ export class STAKING extends BaseContract {
   };
 
   populateTransaction: {
-    allowance(
-      _owner: string,
-      _spender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    approve(
-      _spender: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    balanceOf(
-      _owner: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    burn(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     claim(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     freezing(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     interval(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    mint(
-      _account: string,
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     percent(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    rewardToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     rewards(
       arg0: string,
@@ -624,23 +306,6 @@ export class STAKING extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     stakeToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    transfer(
-      _to: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferFrom(
-      _from: string,
-      _to: string,
-      _value: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     unstake(
       overrides?: Overrides & { from?: string | Promise<string> }

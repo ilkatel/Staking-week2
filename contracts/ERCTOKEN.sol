@@ -2,12 +2,13 @@
 
 pragma solidity ^0.8.0;
 
+import "./interfaces/IERC20.sol";
 
 contract ERCTOKEN {
 
-    event Transfer(address indexed _from, address indexed _to, uint _value);
-    event Approval(address indexed _owner, address indexed _spender, uint _value);
-
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+    
     address private owner;
 
     mapping(address => uint) private balances;
